@@ -1,12 +1,11 @@
-﻿namespace todo.Controllers
+﻿namespace quickstartcore.Controllers
 {
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Models;
+    using quickstartcore.Models;
 
     public class ItemController : Controller
     {
-
         private IDocumentDBRepository<Item> _repository;
 
         public ItemController(IDocumentDBRepository<Item> repository)
@@ -16,16 +15,14 @@
 
         [ActionName("Index")]
         public async Task<IActionResult> Index()
-        {
-            var result = await _repository.GetProc("1");
-
+        {            
             var items = await _repository.GetItemsAsync(d => !d.Completed);
 
             return View(items);
         }
         
         [ActionName("Create")]
-        public async Task<IActionResult> CreateAsync()
+        public IActionResult CreateAsync()
         {
             return View();
         }
@@ -107,5 +104,48 @@
             Item item = await _repository.GetItemAsync(id);
             return View(item);
         }
+
+        [ActionName("StoredProcedure")]
+        public ActionResult CreateStoredProcedure()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("StoredProcedure")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DisplayStoredProcedure()
+        {
+            var result = await _repository.GetStoredProcedureResult();
+
+            var model = new StoredProcedureResult
+            {
+                Result = result
+            };
+
+            return View(model);
+        }
+
+        [ActionName("Trigger")]
+        public ActionResult CreateTriggerResult()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Trigger")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DisplayTriggerResult()
+        {
+            var result = await _repository.GetTriggerResult();
+
+            var model = new TriggerResult
+            {
+                Result = result
+            };
+
+            return View(model);
+        }
+
     }
 }

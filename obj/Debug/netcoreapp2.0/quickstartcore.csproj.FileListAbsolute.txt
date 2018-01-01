@@ -1,0 +1,11 @@
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\bin\Debug\netcoreapp2.0\quickstartcore.deps.json
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\bin\Debug\netcoreapp2.0\quickstartcore.runtimeconfig.json
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\bin\Debug\netcoreapp2.0\quickstartcore.runtimeconfig.dev.json
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\bin\Debug\netcoreapp2.0\quickstartcore.dll
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\bin\Debug\netcoreapp2.0\quickstartcore.pdb
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\obj\Debug\netcoreapp2.0\quickstartcore.csproj.CoreCompileInputs.cache
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\obj\Debug\netcoreapp2.0\quickstartcore.AssemblyInfoInputs.cache
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\obj\Debug\netcoreapp2.0\quickstartcore.AssemblyInfo.cs
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\obj\Debug\netcoreapp2.0\quickstartcore.dll
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\obj\Debug\netcoreapp2.0\quickstartcore.pdb
+D:\Git\vstsdemo\Cosmos\DocumentDB-Quickstart-DotNetCore\quickstartcore\obj\Debug\netcoreapp2.0\quickstartcore.csprojResolveAssemblyReference.cache

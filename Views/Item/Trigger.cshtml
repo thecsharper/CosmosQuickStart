@@ -1,0 +1,54 @@
+﻿@model quickstartcore.Models.TriggerResult
+
+@{
+    ViewBag.Title = "Create Trigger";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Create a new trigger</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        <div class="form-group">
+            <p>The following trigger will be created:</p>
+            <div class="col-md-10">
+                <code>
+                    function validate() {
+                    var context = getContext();
+                    var request = context.getRequest();
+                    var documentToCreate = request.getBody();
+
+                    if (!('timestamp' in documentToCreate)) {
+                    var ts = new Date();
+                    documentToCreate['timestamp'] = ts.getTime();
+                    }
+
+                    request.setBody(documentToCreate);
+                    }
+                </code>
+            </div>
+        </div>
+
+        @if (Model != null && !string.IsNullOrEmpty(Model.Result))
+        {
+            <p>The result of the trigger call is:</p>
+
+            <br />
+
+            <p>@Model.Result</p>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/bundles/jqueryval"></script>

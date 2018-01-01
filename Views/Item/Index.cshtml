@@ -1,4 +1,4 @@
-﻿@model IEnumerable<todo.Models.Item>
+﻿@model IEnumerable<quickstartcore.Models.Item>
 
 @{
     ViewBag.Title = "List of To-Do Items";
@@ -44,4 +44,8 @@
 
 <p>
     @Html.ActionLink("Create New", "Create")
+    <br />
+    @Html.ActionLink("Create Stored Procedure", "StoredProcedure")
+    <br />
+    @Html.ActionLink("Create Trigger", "Trigger")
 </p>

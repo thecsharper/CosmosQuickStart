@@ -1,6 +1,5 @@
-﻿namespace todo.Models
+﻿namespace quickstartcore.Models
 {
-    using Microsoft.Azure.Documents;
     using Newtonsoft.Json;
 
     public class Item

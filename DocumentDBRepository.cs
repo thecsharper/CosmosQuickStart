@@ -1,4 +1,4 @@
-﻿namespace todo
+﻿namespace quickstartcore
 {
     using System;
     using System.Collections.Generic;
@@ -12,10 +12,33 @@
 
     public class DocumentDBRepository<T> : IDocumentDBRepository<T> where T : class
     {
+        private DocumentClient client;
+
         private readonly string DatabaseId;
         private readonly string CollectionId;
 
-        private DocumentClient client;
+        private readonly string StoredProcedureBody = 
+        @"function userProcedure() {
+        var collection = getContext().getCollection();
+        var response = getContext().getResponse();
+        response.setBody(""Hello World"");
+        }";
+
+        private readonly string TriggerBody =
+        @"function validate() {
+        var context = getContext();
+        var request = context.getRequest();                                                             
+        var documentToCreate = request.getBody();
+        
+        // validate properties
+        if (!('timestamp' in documentToCreate)) {
+            var ts = new Date();
+            documentToCreate['timestamp'] = ts.getTime();
+        }
+        
+        // update the document that will be created
+        request.setBody(documentToCreate);
+        }";
 
         public DocumentDBRepository(AppSettings configuration)
         {
@@ -26,65 +49,7 @@
             CreateDatabaseIfNotExistsAsync().Wait();
             CreateCollectionIfNotExistsAsync().Wait();
         }
-
-        public async Task<string> GetProc(string id)
-        {
-            var TestProc = new StoredProcedure
-            {
-                Id = "TestProc",
-                Body = @"
-            function testProc() {
-            var collection = getContext().getCollection();
-            var response = getContext().getResponse();
-            response.setBody(""Hello World"");
-             }"
-            };
-
-            // register stored procedure
-            try
-            {
-                // var result = await client.ReadStoredProcedureAsync("TestProc");
-
-                var createdStoredProcedure = await client.CreateStoredProcedureAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), TestProc);
-
-                var res = createdStoredProcedure.Resource.Id == "TestProc";
-            }
-            catch (DocumentClientException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            //dynamic document = new Document() { Id = "Borges_112" };
-            //document.Title = "Aleph";
-            //document.Year = 1949;
-
-            // execute stored procedure
-            var createdDocument = await client.ExecuteStoredProcedureAsync<string>(UriFactory.CreateStoredProcedureUri(DatabaseId, CollectionId, "testProc1"));
-
-            return createdDocument;
-        }
-
-        public async Task<T> GetTest(string id)
-        {
-            try
-            {
-                var document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, id));
-
-                return (T)(dynamic)document;
-            }
-            catch (DocumentClientException e)
-            {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
+        
         public async Task<T> GetItemAsync(string id)
         {
             try
@@ -176,6 +141,52 @@
                     throw;
                 }
             }
+        }
+
+        public async Task<string> GetStoredProcedureResult()
+        {
+            var TestProc = new StoredProcedure
+            {
+                Id = "UserCreatedStoredProcedure",
+                Body = StoredProcedureBody
+            };
+
+            try
+            {
+                var createdStoredProcedure = await client.CreateStoredProcedureAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), TestProc);
+            }
+            catch (DocumentClientException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+            var storedProcedureResponse = await client.ExecuteStoredProcedureAsync<string>(UriFactory.CreateStoredProcedureUri(DatabaseId, CollectionId, TestProc.Id));
+
+            return storedProcedureResponse;
+        }
+
+        public async Task<string> GetTriggerResult()
+        {
+            var trigger = new Trigger
+            {
+                Id = "UserCreatedTrigger",
+                Body = TriggerBody,
+                TriggerType = TriggerType.Pre,
+                TriggerOperation = TriggerOperation.Create
+            };
+
+            // Todo make the trigger so something useful
+
+            try
+            {
+                var createTrigger = await client.CreateTriggerAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), trigger);
+            }
+            catch (DocumentClientException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return string.Empty;
         }
     }
 }

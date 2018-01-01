@@ -1,0 +1,47 @@
+﻿@model quickstartcore.Models.StoredProcedureResult
+
+@{
+    ViewBag.Title = "Create Stored Procedure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Create a new stored procedure</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        <div class="form-group">
+            <p>The following stored procedure will be created:</p>
+            <div class="col-md-10">
+                <code>
+                    function userProcedure() {
+                    var collection = getContext().getCollection();
+                    var response = getContext().getResponse();
+                    response.setBody(""Hello World"");
+                    }
+                </code>
+            </div>
+        </div>
+
+        @if (Model != null && !string.IsNullOrEmpty(Model.Result))
+        {
+            <p>The result of the stored procedure call is:</p>
+
+            <br />
+
+            <p>@Model.Result</p>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/bundles/jqueryval"></script>

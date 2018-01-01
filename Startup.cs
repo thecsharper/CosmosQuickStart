@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using quickstartcore.Models;
-using todo;
-
-namespace quickstartcore
+﻿namespace quickstartcore
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using quickstartcore.Models;
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -43,7 +42,6 @@ namespace quickstartcore
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
 
             if (env.IsDevelopment())
             {
