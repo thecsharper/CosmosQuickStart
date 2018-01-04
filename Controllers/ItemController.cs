@@ -137,15 +137,25 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DisplayTriggerResult()
         {
-            var result = await _repository.GetTriggerResult();
+            var result = await _repository.CreateTrigger();
 
             var model = new TriggerResult
             {
-                Result = result
+                 Result = result
             };
 
             return View(model);
         }
 
+        [ActionName("Usage")]
+        public ActionResult UsageResult()
+        {
+            var result = new UsageResult
+            {
+                Result = _repository.UsageInformation()
+            };
+
+            return View(result);
+        }
     }
 }

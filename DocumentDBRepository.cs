@@ -1,6 +1,7 @@
 ﻿namespace quickstartcore
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
@@ -12,6 +13,8 @@
 
     public class DocumentDBRepository<T> : IDocumentDBRepository<T> where T : class
     {
+        private ConcurrentDictionary<string, double> _concurrentDictionary;
+
         private DocumentClient client;
 
         private readonly string DatabaseId;
@@ -48,6 +51,8 @@
 
             CreateDatabaseIfNotExistsAsync().Wait();
             CreateCollectionIfNotExistsAsync().Wait();
+
+            _concurrentDictionary = new ConcurrentDictionary<string, double>();
         }
         
         public async Task<T> GetItemAsync(string id)
@@ -162,10 +167,12 @@
             
             var storedProcedureResponse = await client.ExecuteStoredProcedureAsync<string>(UriFactory.CreateStoredProcedureUri(DatabaseId, CollectionId, TestProc.Id));
 
+            _concurrentDictionary.TryAdd(storedProcedureResponse.ActivityId, storedProcedureResponse.RequestCharge);
+
             return storedProcedureResponse;
         }
-
-        public async Task<string> GetTriggerResult()
+        
+        public async Task<string> CreateTrigger()
         {
             var trigger = new Trigger
             {
@@ -175,18 +182,33 @@
                 TriggerOperation = TriggerOperation.Create
             };
 
-            // Todo make the trigger so something useful
+            ResourceResponse<Trigger> createTrigger = null;
 
             try
             {
-                var createTrigger = await client.CreateTriggerAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), trigger);
+                var triggerResult = client.CreateTriggerQuery(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId))
+                                              .Where(t => t.Id == trigger.Id).AsEnumerable().FirstOrDefault();
+
+                if(triggerResult != null)
+                {
+                    return "Trigger already created";
+                }
+
+                createTrigger = await client.CreateTriggerAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), trigger);
             }
             catch (DocumentClientException e)
             {
                 Console.WriteLine(e.Message);
+                
+                return e.Message;
             }
 
-            return string.Empty;
+            return createTrigger.ActivityId;
+        }
+
+        public ConcurrentDictionary<string, double> UsageInformation()
+        {
+            return _concurrentDictionary;
         }
     }
 }

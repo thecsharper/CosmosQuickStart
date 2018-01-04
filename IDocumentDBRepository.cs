@@ -1,6 +1,7 @@
 ﻿namespace quickstartcore
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
@@ -20,6 +21,8 @@
 
         Task<string> GetStoredProcedureResult();
 
-        Task<string> GetTriggerResult();
+        Task<string> CreateTrigger();
+
+        ConcurrentDictionary<string, double> UsageInformation();
     }
 }

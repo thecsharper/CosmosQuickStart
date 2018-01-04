@@ -1,0 +1,34 @@
+﻿@model quickstartcore.Models.UsageResult
+
+@{
+    ViewBag.Title = "Create Stored Procedure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Create a new stored procedure</h2>
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+    <div class="form-group">
+        <p>The following stored procedure will be created:</p>
+    </div>
+
+    @foreach (var result in Model.Result)
+    {
+        <div>@result.Key</div> <text> - </text> <div>@result.Value RU</div><br />
+    }
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/bundles/jqueryval"></script>

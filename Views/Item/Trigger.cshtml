@@ -15,7 +15,7 @@
         <div class="form-group">
             <p>The following trigger will be created:</p>
             <div class="col-md-10">
-                <code>
+                    <pre>
                     function validate() {
                     var context = getContext();
                     var request = context.getRequest();
@@ -28,11 +28,11 @@
 
                     request.setBody(documentToCreate);
                     }
-                </code>
+                    </pre>  
             </div>
         </div>
 
-        @if (Model != null && !string.IsNullOrEmpty(Model.Result))
+        @if (Model != null)
         {
             <p>The result of the trigger call is:</p>
 
@@ -42,7 +42,7 @@
         }
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-offset-0 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>

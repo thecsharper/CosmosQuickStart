@@ -34,7 +34,7 @@
 
             services.AddSingleton(sp => appConfig);
 
-            services.AddScoped(typeof(IDocumentDBRepository<>), typeof(DocumentDBRepository<>));
+            services.AddSingleton(typeof(IDocumentDBRepository<>), typeof(DocumentDBRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
